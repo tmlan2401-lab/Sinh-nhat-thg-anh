@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Garden ♡</title>
+
+    <style>
+        :root {
+            --pink-bg: #fff4f8;
+            --pink-light: #ffe2ed;
+            --pink-main: #e98caf;
+            --pink-dark: #c65d87;
+            --text: #765568;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+            background: linear-gradient(
+                135deg,
+                #fff6fa,
+                #ffe6ef,
+                #fff0f5
+            );
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            color: var(--text);
+        }
+
+        /* Background bánh sinh nhật bay lơ lửng */
+        .birthday-bg {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cake {
+            position: absolute;
+            bottom: -80px;
+            opacity: 0;
+            animation: floatUp linear infinite;
+            user-select: none;
+            filter: drop-shadow(0 3px 5px #e9a4bf33);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(-12deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.75;
+            }
+            85% {
+                opacity: 0.65;
+            }
+            100% {
+                transform: translateY(-115vh) rotate(18deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hộp nhập mật khẩu */
+        .password-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 390px;
+            padding: 36px 26px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 12px 40px #d77ba526;
+            backdrop-filter: blur(8px);
+            animation: appear 0.7s ease-out;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-icon {
+            font-size: 52px;
+            margin-bottom: 12px;
+            animation: wiggle 2.5s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        h1 {
+            font-size: 25px;
+            color: var(--pink-dark);
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #f1c1d4;
+            border-radius: 14px;
+            outline: none;
+            background: #fffafd;
+            color: var(--text);
+            font-size: 15px;
+            transition: 0.25s;
+        }
+
+        .password-input:focus {
+            border-color: var(--pink-main);
+            box-shadow: 0 0 0 4px #f7c9dc55;
+        }
+
+        .password-input::placeholder {
+            color: #c5a4b3;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn {
+            margin-top: 14px;
+            color: white;
+            background: var(--pink-main);
+            box-shadow: 0 5px 12px #e98caf44;
+        }
+
+        .submit-btn:hover {
+            background: var(--pink-dark);
+        }
+
+        .hint-btn {
+            margin-top: 10px;
+            color: var(--pink-dark);
+            background: var(--pink-light);
+        }
+
+        .hint-btn:hover {
+            background: #ffd3e3;
+        }
+
+        /* Khu vực gợi ý bật/tắt */
+        .hint-box {
+            display: none;
+            margin-top: 14px;
+            padding: 14px;
+            border: 1px dashed #e9a0bc;
+            border-radius: 14px;
+            background: #fff4f8;
+            font-size: 13px;
+            line-height: 1.7;
+            text-align: left;
+            overflow-wrap: anywhere;
+            animation: appear 0.25s ease-out;
+        }
+
+        .hint-box.show {
+            display: block;
+        }
+
+        .message {
+            min-height: 24px;
+            margin-top: 15px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .message.error {
+            color: #cf5476;
+        }
+
+        .message.success {
+            color: #4b9a75;
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #bb91a6;
+        }
+
+        @media (max-width: 420px) {
+            .password-card {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background bánh sinh nhật -->
+    <div class="birthday-bg" id="birthdayBg" aria-hidden="true"></div>
+
+    <main class="password-card">
+        <div class="main-icon" aria-hidden="true">🎂</div>
+
+        <h1>Secret Garden ♡</h1>
+
+        <p class="description">
+            Một chiếc bí mật nho nhỏ đang chờ bạn mở khóa.
+            <br>
+            Hãy nhập mật khẩu để tiếp tục nhé!
+        </p>
+
+        <form id="passwordForm">
+            <input
+                type="password"
+                id="passwordInput"
+                class="password-input"
+                placeholder="Nhập mật khẩu của bạn..."
+                aria-label="Mật khẩu"
+                autocomplete="off"
+                required
+            >
+
+            <button type="submit" class="submit-btn">
+                Mở khóa ♡
+            </button>
+        </form>
+
+        <button
+            type="button"
+            id="hintButton"
+            class="hint-btn"
+            aria-expanded="false"
+            aria-controls="hintBox"
+        >
+            Gợi ý mật khẩu ♡
+        </button>
+
+        <div id="hintBox" class="hint-box">
+            <strong>Gợi ý nho nhỏ:</strong>
+            <p>
+                Cú pháp: vai trò của người gửi đối với bạn
+                + cute bá khí nhất thế giới
+            </p>
+        </div>
+
+        <p
+            id="message"
+            class="message"
+            role="status"
+            aria-live="polite"
+        ></p>
+
+        <p class="footer">Made with love and a little pink magic ♡</p>
+    </main>
+
+    <script>
+        // ==========================================
+        // 1. CẤU HÌNH
+        // ==========================================
+
+        const CORRECT_PASSWORD = "Em gái cute bá khí nhất thế giới";
+
+        // Đổi thành tên file đích em muốn mở khi nhập đúng.
+        // Ví dụ: "welcome.html" hoặc "index.html".
+        const NEXT_PAGE = "welcome.html";
+
+
+        // ==========================================
+        // 2. TẠO BÁNH SINH NHẬT BAY
+        // ==========================================
+
+        const birthdayBg = document.getElementById("birthdayBg");
+        const cakeIcons = ["🎂", "🧁", "🎂", "🍰", "🎂", "🎉"];
+        const cakeCount = 18;
+
+        for (let i = 0; i < cakeCount; i++) {
+            const cake = document.createElement("span");
+
+            cake.className = "cake";
+            cake.textContent =
+                cakeIcons[Math.floor(Math.random() * cakeIcons.length)];
+
+            cake.style.left = Math.random() * 100 + "%";
+            cake.style.fontSize = (20 + Math.random() * 22) + "px";
+            cake.style.animationDuration = (9 + Math.random() * 13) + "s";
+            cake.style.animationDelay = (-Math.random() * 20) + "s";
+
+            birthdayBg.appendChild(cake);
+        }
+
+
+        // ==========================================
+        // 3. NÚT GỢI Ý BẬT / TẮT
+        // ==========================================
+
+        const hintButton = document.getElementById("hintButton");
+        const hintBox = document.getElementById("hintBox");
+
+        hintButton.addEventListener("click", function () {
+            const isVisible = hintBox.classList.toggle("show");
+
+            hintButton.textContent = isVisible
+                ? "Ẩn gợi ý ♡"
+                : "Gợi ý mật khẩu ♡";
+
+            hintButton.setAttribute("aria-expanded", String(isVisible));
+        });
+
+
+        // ==========================================
+        // 4. KIỂM TRA MẬT KHẨU
+        // ==========================================
+
+        const passwordForm = document.getElementById("passwordForm");
+        const passwordInput = document.getElementById("passwordInput");
+        const message = document.getElementById("message");
+
+        passwordForm.addEventListener("submit", function (event) {
+            // Ngăn trình duyệt tải lại trang khi gửi form.
+            event.preventDefault();
+
+            const enteredPassword = passwordInput.value;
+            message.className = "message";
+
+            if (enteredPassword === CORRECT_PASSWORD) {
+                message.textContent = "Chính xác rồi! Đang mở bí mật... ♡";
+                message.classList.add("success");
+
+                // Chỉ chuyển trang khi mật khẩu chính xác.
+                window.location.href = NEXT_PAGE;
+            } else {
+                // Mật khẩu sai: giữ nguyên trang hiện tại.
+                message.textContent =
+                    "Chưa đúng rồi nè, thử lại nhé! 🎀";
+
+                message.classList.add("error");
+                passwordInput.focus();
+                passwordInput.select();
+            }
+        });
+    </script>
+</body>
+</html>
